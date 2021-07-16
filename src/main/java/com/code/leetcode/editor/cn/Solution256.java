@@ -24,16 +24,17 @@ package com.code.leetcode.editor.cn;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution256 {
     /**
-     *  创建一个minCost 数组 int[][] minCost = new int[length][3];
-     *  minCost[i][0] 表示以当前位置为i的房子 图红色时，所花费的最小值
-     *  minCost[i][1] 表示以当前位置为i的房子 图蓝色时，所花费的最小值
-     *  minCost[i][2] 表示以当前位置为i的房子 图绿色时，所花费的最小值
-     *  当执行到位置为N时，在 minCost[i][0], minCost[i][1] minCost[i][2] 中取最小值
+     * 创建一个minCost 数组 int[][] minCost = new int[length][3];
+     * minCost[i][0] 表示以当前位置为i的房子 图红色时，所花费的最小值
+     * minCost[i][1] 表示以当前位置为i的房子 图蓝色时，所花费的最小值
+     * minCost[i][2] 表示以当前位置为i的房子 图绿色时，所花费的最小值
+     * 当执行到位置为N时，在 minCost[i][0], minCost[i][1] minCost[i][2] 中取最小值
+     *
      * @param costs
      * @return
      */
     public int minCost(int[][] costs) {
-        return doCost(costs);
+        return doCost1(costs);
     }
 
     public int doCost(int[][] costs) {
@@ -44,12 +45,35 @@ class Solution256 {
         minCost[0][2] += costs[0][2];
         for (int i = 1; i < length; i++) {
 
-            minCost[i][0] = minCost[i - 1][1] < minCost[i - 1][2] ? minCost[i - 1][1] + costs[i][0] :  minCost[i - 1][2] + costs[i][0];
-            minCost[i][1] = minCost[i - 1][0] < minCost[i - 1][2] ? minCost[i - 1][0] + costs[i][1] :  minCost[i - 1][2] + costs[i][1];
-            minCost[i][2] = minCost[i - 1][0] < minCost[i - 1][1] ? minCost[i - 1][0] + costs[i][2] :  minCost[i - 1][1] + costs[i][2];
+            minCost[i][0] = minCost[i - 1][1] < minCost[i - 1][2] ? minCost[i - 1][1] + costs[i][0] : minCost[i - 1][2] + costs[i][0];
+            minCost[i][1] = minCost[i - 1][0] < minCost[i - 1][2] ? minCost[i - 1][0] + costs[i][1] : minCost[i - 1][2] + costs[i][1];
+            minCost[i][2] = minCost[i - 1][0] < minCost[i - 1][1] ? minCost[i - 1][0] + costs[i][2] : minCost[i - 1][1] + costs[i][2];
         }
 
         return Math.min(Math.min(minCost[length - 1][0], minCost[length - 1][1]), minCost[length - 1][2]);
+    }
+
+    /**
+     * 优化： 实际上当前状态只对上一个状态依赖，所以只需要三个变量即可，而不需要数组
+     * @param costs
+     * @return
+     */
+    public int doCost1(int[][] costs) {
+        int length = costs.length;
+        int minCost1 = costs[0][0];
+        int minCost2 = costs[0][1];
+        int minCost3 = costs[0][2];
+        for (int i = 1; i < length; i++) {
+
+            int minCost1Tmp = minCost2 < minCost3 ? minCost2 + costs[i][0] : minCost3 + costs[i][0];
+            int minCost2Tmp = minCost1 < minCost3 ? minCost1 + costs[i][1] : minCost3 + costs[i][1];
+            int minCost3Tmp = minCost1 < minCost2 ? minCost1 + costs[i][2] : minCost2 + costs[i][2];
+            minCost1 = minCost1Tmp;
+            minCost2 = minCost2Tmp;
+            minCost3 = minCost3Tmp;
+        }
+
+        return Math.min(Math.min(minCost1, minCost2), minCost3);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
