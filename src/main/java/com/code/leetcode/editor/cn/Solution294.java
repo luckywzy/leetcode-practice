@@ -37,10 +37,42 @@ package com.code.leetcode.editor.cn;
 // Related Topics 记忆化搜索 数学 动态规划 回溯 博弈 👍 87 👎 0
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
+class Solution294 {
     public boolean canWin(String currentState) {
+        Map<String, Boolean> currentWinMap = new HashMap<>();
+        return doCanWin(currentState, currentWinMap);
 
     }
+
+    /**
+     * 1、这题不是很懂
+     * @param currentState
+     * @param currentWinMap
+     * @return
+     */
+    private boolean doCanWin(String currentState, Map<String, Boolean> currentWinMap) {
+        if (currentWinMap.containsKey(currentState)) {
+            return currentWinMap.get(currentState);
+        }
+        for (int i = 0; i < currentState.length() - 1; i++) {
+            if (currentState.charAt(i) == '+' && currentState.charAt(i + 1) == '+') {
+                StringBuilder sb = new StringBuilder(currentState);
+                sb.replace(i, i + 2, "--");
+                //当我改变这两个字符后 , 存在一种下一个先手的人必输的情况 ， 那么当前先手的人就是必胜的
+                if (!doCanWin(sb.toString(), currentWinMap)) {
+                    currentWinMap.put(sb.toString(), false);
+                    return true;
+                }
+                currentWinMap.put(sb.toString(), true);
+            }
+        }
+        return false;
+    }
+
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
