@@ -1,0 +1,55 @@
+题目不是太难，是那种**部分和整体可以同样处理**的，所以可以用递归来做，递归到不能再递归，保存结果，再回溯，再递归，如此往复
+
+> 如果思考的角度不同，写的代码就会不同：
+> 如果**考虑每个字符**，那么每个字符都可以缩写或者不缩写，从这里可以写出代码（backtrace)
+> 那如果每个字符都可以缩写或者不缩写，那**一共会有2^n种可能的缩写**，正好与二进制数0~2^n-1对应，将这些数的每一位的1,0看成缩写和不缩写，那么不用递归也可以了(非backtrace))
+> 那如果**考虑每次的长度**，每次缩写或者不缩写的长度可以是1~当前长度，从这里也可以写出代码(backtrace)
+
+我用的是第三种方法（前两种是官方题解的方法，其它题解没看）
+代码如下（有注释）：
+
+* java
+
+```java
+class Solution {
+    List<String> res = new ArrayList<>();
+    StringBuilder sb = new StringBuilder();// 使用StringBuilder.append避免字符串+
+
+    public List<String> generateAbbreviations(String word) {
+        generateAbbreviations(word.toCharArray(), 0, null);
+        return res;
+    }
+
+    // s当前字符串在原串中的起始位置，alpha之前是否是字符，null的话表示之前没有，是开始
+    private void generateAbbreviations(char[] word, int s, Boolean alpha){
+        if(s == word.length){// 结束递归，保存结果
+            res.add(sb.toString());
+            return;
+        }
+
+        if(alpha == null){// 缩写开始
+            for(int i = 1; i <= word.length; i++){//此次可以缩写或不缩写，缩写或不缩写的长度可以是1~word.length
+                sb.append(i);
+                generateAbbreviations(word, i, false);
+                sb.setLength(sb.length()-String.valueOf(i).length());
+                sb.append(String.valueOf(word, 0, i));
+                generateAbbreviations(word, i, true);
+                sb.setLength(sb.length() - i);
+            }
+        }else if(alpha){//上一次是字符（没有缩写），那么此次缩写，长度可以是1~当前长度
+            for(int i = 1; i <= word.length - s; i++){
+                sb.append(i);
+                generateAbbreviations(word, s + i, false);
+                sb.setLength(sb.length()-String.valueOf(i).length());
+            }
+        }else{//上一次是缩写（数字），那么此次为字符，长度可以是1~当前长度
+            for(int i = 1; i <= word.length - s; i++){
+                sb.append(String.valueOf(word, s, i));
+                generateAbbreviations(word, s + i, true);
+                sb.setLength(sb.length() - i);
+            }
+        }
+    }
+}
+```
+
