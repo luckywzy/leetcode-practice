@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
+class Solution340 {
     /**
      * 方法1：滑动窗口加 hash表
      * 问题求解是的： 至多 包含 k 个不同字符的最长子串 T，即连续的子串；

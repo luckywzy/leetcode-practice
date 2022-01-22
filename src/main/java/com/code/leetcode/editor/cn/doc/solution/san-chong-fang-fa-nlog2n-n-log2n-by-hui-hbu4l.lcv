@@ -1,0 +1,46 @@
+### 解题思路
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    //旋转定义：数组元素统一右移
+    public int findMin(int[] nums) {
+        //法一、排序返回 O(nlog2n)
+        // Arrays.sort(nums);
+        // return nums[0];
+        //法二、O(n),一次遍历
+        // for(int i=0;i<nums.length-1;i++){
+        //    if(nums[i]<nums[i+1])continue;
+        //    return nums[i+1];
+        // }
+        // return nums[0];
+        //法三、二分查找——最小值包含在区间内进行不断地缩小
+        int left = 0;
+        int right=nums.length-1;
+        while(left<right){
+            int mid=left+(right-left)/2;//由于向下取整，因此mid更靠近left
+            if(nums[mid]>nums[right]) 
+                left=mid+1;
+            else 
+                right=mid;//if(nums[mid]<nums[right])
+        }
+        return nums[left];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+```
+

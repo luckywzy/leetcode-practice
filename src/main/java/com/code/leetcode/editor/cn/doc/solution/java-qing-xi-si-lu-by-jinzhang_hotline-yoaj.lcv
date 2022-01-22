@@ -1,0 +1,24 @@
+比较清晰思路 但是速度不快
+
+* 
+
+```
+class Solution {
+    // 难点在于确定 当前node离边缘叶子 多远
+    // 父亲节点 =  最大子节点 + 1   (叶子节点位置0)
+    private Map<Integer,List<Integer>> map = new TreeMap<>();
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        dfs(root); return new LinkedList<>(map.values());
+    }
+    
+    private int dfs(TreeNode root) {
+        if (root == null)  return 0;
+        int leftDistance = dfs(root.left);
+        int rightDistance = dfs(root.right);
+        int currentDistance = Math.max(leftDistance, rightDistance) + 1 ;
+        map.computeIfAbsent(currentDistance, i->new LinkedList<>()).add(root.val);
+        return currentDistance;
+    }
+}
+```
+

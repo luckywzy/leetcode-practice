@@ -1,0 +1,50 @@
+利用morris可以将空间复杂度降到O(1),在遍历过程中修改刚遍历过的now节点的左指针和上一个遍历过的pre节点的右指针。
+不熟悉morris遍历可以先看看这篇文章。[morris遍历](https://zhuanlan.zhihu.com/p/101321696)
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    Node* treeToDoublyList(Node* root) {
+        if(root==NULL)
+            return NULL;
+
+        Node *cur=root,*mostright,*ans=root,*pre=NULL;
+
+        while(ans->left!=NULL)//找到最小值
+            ans=ans->left;
+
+        while(cur!=NULL)
+        {
+            mostright=cur->left;
+            if(mostright!=NULL)
+            {
+                while(mostright->right!=NULL&&mostright->right!=cur)
+                    mostright=mostright->right;
+                if(mostright->right==NULL)
+                {
+                    mostright->right=cur;
+                    cur=cur->left;
+                    continue;
+                }
+            }
+          
+            Node *now=cur;//记录遍历过的节点
+            cur=cur->right;//必须先将cur指向下一个节点
+            //遍历过的节点可以直接修改左右指针
+            if(pre!=NULL)
+            {
+                now->left=pre;
+                pre->right=now;
+            }
+            pre=now;
+        }
+        pre->right=ans;
+        ans->left=pre;
+        return ans;
+    }
+};
+```
+
+时间复杂度O(n),空间复杂度O(1).

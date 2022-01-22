@@ -1,0 +1,57 @@
+### 解题思路
+
+解法1：先计算再暴力排序
+
+解法2：双指针从两头开始计算，保存两端值较小的一个到结果。利用高中数学抛物线性质，a>0，向上的抛物线，两端大中间小，从后往前存储结算结果。反之，a<0，向下的抛物线，两端小中间大，从前往后存储结算结果。a=0的情况时直线，单调增加或减少（取决于b的正负）。直接跟a>0或者a<0合并即可。除了面试官装B卖弄他高中数学，没啥实际意义的一题，无聊。
+
+### 代码
+
+* cpp
+
+```cpp
+// O(NlgN)
+class Solution1 {
+public:
+    vector<int> sortTransformedArray(vector<int>& nums, int a, int b, int c) {
+        vector<int> res;
+        for (const auto& x : nums) {
+            int t = a * x * x + b * x + c;
+            res.push_back(t);
+        }
+
+        sort(res.begin(), res.end());
+
+        return res;
+    }
+};
+
+// O(N)
+class Solution {
+public:
+    vector<int> sortTransformedArray(vector<int>& nums, int a, int b, int c) {
+        if (nums.empty()) {
+            return {};
+        }
+
+        int N = nums.size();
+        vector<int> res(N, 0);
+        auto fx = [&](const auto& x) {
+            return a * x * x + b * x + c;
+        };
+
+        int i = 0;
+        int j = N - 1;
+        int index = a >= 0 ? N - 1 : 0; // a > 0, backward, a < 0, forward
+        while (i <= j) {
+            if (a >= 0) { //向上的抛物线,合并a=0为直线，单调增减情况到a>0（合并到a < 0也行）
+                res[index--] = fx(nums[i]) >= fx(nums[j]) ? fx(nums[i++]) : fx(nums[j--]);
+            } else { // (a < 0)
+                res[index++] = fx(nums[i]) > fx(nums[j]) ? fx(nums[j--]) : fx(nums[i++]);
+            }
+        }
+
+        return res;
+    }
+};
+```
+
