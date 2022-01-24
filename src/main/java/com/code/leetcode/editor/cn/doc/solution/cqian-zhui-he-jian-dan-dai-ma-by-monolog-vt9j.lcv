@@ -1,0 +1,19 @@
+* c++
+
+```c++
+class Solution {
+public:
+    int minSwaps(vector<int>& data) {
+        vector<int> sum(data.size() + 1);
+        for(int i = 0; i < data.size(); ++i){
+            sum[i + 1] = data[i] + sum[i];
+        }
+        int total = sum.back(), ans = INT_MAX;
+        for(int i = total; i < sum.size(); ++i){
+            ans = min(ans, total - sum[i] + sum[i - total]);
+        }
+        return ans;
+    }
+};
+```
+
