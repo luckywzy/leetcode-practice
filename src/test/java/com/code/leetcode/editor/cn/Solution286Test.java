@@ -2,11 +2,6 @@ package com.code.leetcode.editor.cn;
 
 import org.junit.Test;
 
-import javax.jnlp.SingleInstanceListener;
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
-
 /**
  * @author wangzongyu
  * @Description:
