@@ -1,0 +1,66 @@
+> Problem: [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+        
+     List<List<Integer>> result = new ArrayList<>();  //存放最后结果
+     List<Integer> path = new ArrayList<>();  //单一路径
+   
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        backtracking(nums,0);
+        return result;
+    }
+
+    //一个元素不能重复使用，需要startIndex
+    private void backtracking (int[] nums, int startIndex) {
+
+        //大于等于2--最少也是两个元素，不加return，要返回树上的所有节点
+        if (path.size() > 1) {
+            result.add(new ArrayList<>(path));
+        }
+
+        //创建一个长度为201的整型数组 used，用于记录数字的使用情况。
+        //数组的索引范围是从 -100 到 100，加上100是为了适应负数的情况。
+        int[] used = new int[201];
+
+        for (int i = startIndex; i < nums.length; i++) {
+           //当前取得数小于子集最右面的数、不能重复取数
+            if (!path.isEmpty() && nums[i] < path.get(path.size() - 1) ||
+                    (used[nums[i] + 100] == 1)) {
+                        continue;
+            }
+            //表示当前数字已被使用
+            used[nums[i] + 100] = 1;          
+            path.add(nums[i]);
+            backtracking(nums, i + 1);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+```
+

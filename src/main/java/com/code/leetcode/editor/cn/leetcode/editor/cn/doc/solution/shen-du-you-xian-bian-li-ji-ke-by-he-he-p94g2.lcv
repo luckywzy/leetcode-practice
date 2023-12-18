@@ -1,0 +1,34 @@
+dfs深度优先遍历。 思路简单。 注意：
+
+1. 当且仅当左子节点和右子节点都为空时，才需要对深度进行统计
+2. 当根节点就为空时，最小深度为0，需要处理一下。
+
+* 
+
+```
+public int minDepth(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        int depth = 0;
+        dfs(root, list, depth);
+        int res = Integer.MAX_VALUE;
+        for (int num : list) {
+            res = Math.min(num, res);
+        }
+        return res;
+    }
+    public void dfs(TreeNode root, List<Integer> list, int depth) {
+        if (root == null) {
+            if (depth == 0) {
+                list.add(0);
+            }
+            return;
+        }
+        depth++;
+        if (root.left == null && root.right == null) {
+            list.add(depth);
+        }
+        dfs(root.left, list, depth);
+        dfs(root.right, list, depth);
+    }
+```
+

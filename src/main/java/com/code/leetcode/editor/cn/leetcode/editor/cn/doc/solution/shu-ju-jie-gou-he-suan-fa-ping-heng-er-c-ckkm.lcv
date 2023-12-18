@@ -1,0 +1,165 @@
+### 1，从上到下
+
+平衡二叉树要求的是**左右子节点的高度不能超过1**，所以我们可以判断树的左右两个子节点的高度只要不超过```1```就行，而树的高度怎么计算呢，其实很简单，代码如下
+
+* java
+
+```java
+//计算树中节点的高度
+public int depth(TreeNode root) {
+    if (root == null)
+        return 0;
+    return Math.max(depth(root.left), depth(root.right)) + 1;
+}
+```
+
+所以这题的代码我们也很容易写出来
+
+* java
+
+```java
+public boolean isBalanced(TreeNode root) {
+    if (root == null)
+        return true;
+    //分别计算左子树和右子树的高度
+    int left = depth(root.left);
+    int right = depth(root.right);
+    //这两个子树的高度不能超过1
+    return Math.abs(left - right) <= 1;
+}
+
+//计算树中节点的高度
+public int depth(TreeNode root) {
+    if (root == null)
+        return 0;
+    return Math.max(depth(root.left), depth(root.right)) + 1;
+}
+```
+
+但这里会有个问题，因为**二叉平衡树的任何一棵子树也都必须是平衡的**，上面我们只判断了根节点的两个子节点的高度是否小于等于1，没有判断子树是否是平衡的。
+
+<br> </br>
+
+如下图所示，虽然根节点的两个子节点的高度是一样的，但很明显根节点的右子树不是平衡的，也就是说这棵树不是平衡二叉树。
+
+![image.png](https://pic.leetcode-cn.com/1619490697-cTwTqj-image.png)
+
+所以除了判断根节点以外，还需要判断所有的子节点，具体看下视频
+
+![offer55-2.mp4](https://leetcode.cn/problems/balanced-binary-tree/solution/shu-ju-jie-gou-he-suan-fa-ping-heng-er-c-ckkm/f93ae990-a916-49bb-a593-e07e29092b53)
+
+再来看下代码
+
+* java
+
+```java
+public boolean isBalanced(TreeNode root) {
+    if (root == null)
+        return true;
+    //分别计算左子树和右子树的高度
+    int left = depth(root.left);
+    int right = depth(root.right);
+    //这两个子树的高度不能超过1，并且他的两个子树也必须是平衡二叉树
+    return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+}
+
+//计算树中节点的高度
+public int depth(TreeNode root) {
+    if (root == null)
+        return 0;
+    return Math.max(depth(root.left), depth(root.right)) + 1;
+}
+```
+
+看下运行结果
+
+![image.png](https://pic.leetcode-cn.com/1619491143-NYTwCo-image.png)
+
+<br> </br>
+
+### 2，从下到上
+
+上面的计算过程是从上往下判断的，其实我们还可以从下往上判断，就是从叶子节点开始往上，如果某一个子树不是平衡的就返回false，具体看视频
+
+![offer55-2 -1.mp4](https://leetcode.cn/problems/balanced-binary-tree/solution/shu-ju-jie-gou-he-suan-fa-ping-heng-er-c-ckkm/cdab59d4-d904-4426-ab5d-e4fe144f7cd8)
+
+先判断两个子树是否是平衡的，然后再判断以当前节点为根节点的子树是否是平衡的……。来看下代码
+
+* java
+
+```java
+//如果等于-1就表示不是平衡的
+private static final int UNBALANCED = -1;
+
+public boolean isBalanced(TreeNode root) {
+    return helper(root) != UNBALANCED;
+}
+
+public int helper(TreeNode root) {
+    if (root == null)
+        return 0;
+
+    //如果左子节点不是平衡二叉树，直接返回UNBALANCED
+    int left = helper(root.left);
+    if (left == UNBALANCED)
+        return UNBALANCED;
+
+    //如果右子节点不是平衡二叉树，直接返回UNBALANCED
+    int right = helper(root.right);
+    if (right == UNBALANCED)
+        return UNBALANCED;
+
+    //如果左右子节点都是平衡二叉树，但他们的高度相差大于1，
+    //直接返回UNBALANCED
+    if (Math.abs(left - right) > 1)
+        return UNBALANCED;
+
+    //否则就返回二叉树中节点的最大高度
+    return Math.max(left, right) + 1;
+}
+```
+
+看一下运行结果
+
+![image.png](https://pic.leetcode-cn.com/1619491171-vJPdjE-image.png)
+
+### 3，总结
+
+关于二叉树的一些常用术语我们来总结一下：
+
+**节点的度**：一个节点含有的子树的个数称为该节点的度；
+
+**树的度**：一棵树中，最大的节点度称为树的度；
+
+**叶节点或终端节点**：度为零的节点；
+
+**非终端节点或分支节点**：度不为零的节点；
+
+**父亲节点或父节点**：若一个节点含有子节点，则这个节点称为其子节点的父节点；
+
+**孩子节点或子节点**：一个节点含有的子树的根节点称为该节点的子节点；
+
+**兄弟节点**：具有相同父节点的节点互称为兄弟节点；
+
+**节点的层次**：从根开始定义起，根为第1层，根的子节点为第2层，以此类推；
+
+**深度**：对于任意节点n,n的深度为从根到n的唯一路径长，根的深度为0；
+
+**高度**：对于任意节点n,n的高度为从n到一片树叶的最长路径长，所有树叶的高度为0；
+
+**堂兄弟节点**：父节点在同一层的节点互为堂兄弟；
+
+**节点的祖先**：从根到该节点所经分支上的所有节点；
+
+**子孙**：以某节点为根的子树中任一节点都称为该节点的子孙。
+
+**森林**：由m（m>=0）棵互不相交的树的集合称为森林；
+
+<br> </br>
+
+我把部分**算法题**整理成了**PDF**文档，截止目前总共有**1000多页**，大家可以下载阅读
+**链接**：https://pan.baidu.com/s/1hjwK0ZeRxYGB8lIkbKuQgQ
+**提取码**：6666
+
+#### 如果觉得有用就给个赞吧，还可以关注我的[LeetCode主页](https://leetcode-cn.com/u/sdwwld/)查看更多的详细题解
+

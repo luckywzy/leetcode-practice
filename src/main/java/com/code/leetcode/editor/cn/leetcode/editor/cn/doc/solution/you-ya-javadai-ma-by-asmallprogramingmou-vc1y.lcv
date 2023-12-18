@@ -1,0 +1,69 @@
+> Problem: [257. 二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/description/)
+
+[TOC]
+
+# 思路
+
+> 回溯
+
+# 解题方法
+
+> 回溯
+
+1. 圈复杂度低
+2. 低嵌套
+3. 代码简洁
+
+# 复杂度
+
+- 时间复杂度:
+
+> 递归遍历所有节点和边 $O(V + E)$
+
+- 空间复杂度:
+
+> 存储所有的边节点 $O(V)$
+
+# Code
+
+* []
+
+```Java
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> ret = new ArrayList<>();
+        dfs(root, new ArrayList<>(), ret);
+        return ret;
+    }
+    private void dfs(TreeNode root, List<String> nodes, List<String> ret) {
+        nodes.add(String.valueOf(root.val));
+        if (root.left == null && root.right == null) {
+            ret.add(String.join("->", nodes));
+        }
+        if (root.left != null) {
+            dfs(root.left, nodes, ret);
+        }
+        if (root.right != null) {
+            dfs(root.right, nodes, ret);
+        }
+        nodes.remove(nodes.size() - 1);
+    }
+}
+```
+
