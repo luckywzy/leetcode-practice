@@ -1,0 +1,186 @@
+# 1、堆（优化）
+
+* []
+
+```JavaScript
+class MinHeap {
+  constructor() {
+      this.heap = [];
+  }
+  swap(i1, i2) {
+      const temp = this.heap[i1];
+      this.heap[i1] = this.heap[i2];
+      this.heap[i2] = temp;
+  }
+  getParentIndex(i) {
+      // return Math.floor((i - 1) / 2);
+      return (i - 1) >> 1;
+  }
+  getLeftIndex(i) {
+      return i * 2 + 1;
+  }
+  getRightIndex(i) {
+      return i * 2 + 2;
+  }
+  shiftUp(index) {
+      if (index === 0) {
+          return;
+      }
+      const parentIndex = this.getParentIndex(index);
+      if (this.heap[parentIndex] > this.heap[index]) {
+          this.swap(parentIndex, index);
+          this.shiftUp(parentIndex);
+      }
+  }
+  insert(value) {
+      this.heap.push(value);
+      // 上移
+      this.shiftUp(this.heap.length - 1);
+  }
+  shiftDown(index) {
+      const lastIndex = this.size() - 1;
+      while (true) {
+          let leftIndex = this.getLeftIndex(index);
+          let rightIndex = this.getRightIndex(index);
+          let findIndex = index;
+          if (leftIndex <= lastIndex && this.heap[leftIndex] < this.heap[findIndex]) {
+              findIndex = leftIndex;
+          }
+          if (rightIndex <= lastIndex && this.heap[rightIndex] < this.heap[findIndex]) {
+              findIndex = rightIndex;
+          }
+          if (index !== findIndex) {
+              this.swap(index, findIndex);// 交换当前元素和左右节点中value小的
+              index = findIndex;
+          } else {
+              break;
+          }
+      }
+
+  }
+  pop() {
+      this.heap[0] = this.heap.pop();
+      this.shiftDown(0);
+  }
+  peek() {
+      return this.heap[0];
+  }
+  size() {
+      return this.heap.length;
+  }
+}
+/**
+* @param {number[]} nums
+* @param {number} k
+* @return {number}
+*/
+var findKthLargest = function (nums, k) {
+  const h = new MinHeap();
+  nums.forEach(n => {
+      h.insert(n);
+      if (h.size() > k) {
+          h.pop();
+      }
+  });
+  return h.peek();
+};
+```
+
+## 复杂度
+
+时间复杂度:
+
+> $O(n * logk)$
+
+空间复杂度:
+
+> $O(k)$
+> 2、堆（超时）
+
+* []
+
+```JavaScript
+class MinHeap {
+    constructor() {
+        this.heap = [];
+    }
+    swap(i1, i2) {
+        const temp = this.heap[i1];
+        this.heap[i1] = this.heap[i2];
+        this.heap[i2] = temp;
+    }
+    getParentIndex(i) {
+        // return Math.floor((i - 1) / 2);
+        return (i - 1) >> 1;
+    }
+    getLeftIndex(i) {
+        return i * 2 + 1;
+    }
+    getRightIndex(i) {
+        return i * 2 + 2;
+    }
+    shiftUp(index) {
+        if (index === 0) {
+            return;
+        }
+        const parentIndex = this.getParentIndex(index);
+        if (this.heap[parentIndex] > this.heap[index]) {
+            this.swap(parentIndex, index);
+            this.shiftUp(parentIndex);
+        }
+    }
+    insert(value) {
+        this.heap.push(value);
+        // 上移
+        this.shiftUp(this.heap.length - 1);
+    }
+    shiftDown(index) {
+        const leftIndex = this.getLeftIndex(index);
+        const rightIndex = this.getRightIndex(index);
+        if (this.heap[leftIndex] < this.heap[index]) {
+            this.swap(leftIndex, index);
+            this.shiftDown(leftIndex);
+        }
+        if (this.heap[rightIndex] < this.heap[index]) {
+            this.swap(rightIndex, index);
+            this.shiftDown(rightIndex);
+        }
+    }
+    pop() {
+        this.heap[0] = this.heap.pop();
+        this.shiftDown(0);
+    }
+    peek() {
+        return this.heap[0];
+    }
+    size() {
+        return this.heap.length;
+    }
+}
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function (nums, k) {
+    const h = new MinHeap();
+    nums.forEach(n => {
+        h.insert(n);
+        if (h.size() > k) {
+            h.pop();
+        }
+    });
+    return h.peek();
+};
+```
+
+## 复杂度
+
+时间复杂度:
+
+> $O(n * logk)$
+
+空间复杂度:
+
+> $O(k)$
+

@@ -1,0 +1,70 @@
+> Problem: [31. 下一个排列](https://leetcode.cn/problems/next-permutation/description/)
+
+# Code
+
+* []
+
+```Python
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        这题的核心是，为什么能怎么做？我怎么样才能想到怎么做？下次碰到了还能想到这个方法吗？怎么感觉这么trick呢？
+        如果感觉解法有点trick难以想到？那是因为你没用对思考方式，用DFS遍历所有排序的思路来思考，如丝般顺滑，不会有trick的感觉
+        ---
+        假如题目是按照字母序给出所有排序，会怎么做？dfs 遍历树即可
+            已经遍历了 [1,3,4,8]；剩下[7,5,6],那就会有3个dfs分支（5，XX）（6，XX）（7，XX）
+        那么我们这题就是在dfs过程中，dfs走到了某个叶子节点后，下一个叶子节点是什么
+        ---
+        到此，我们可以考虑如何实现：
+        （1）在完整DFS基础上做改动（让dfs先走当前的路径到当前的叶子节点后再继续dfs给出下一个）
+        （2）或者，我们可以分析dfs回溯的方式来实现：比如当前是11“5”6743，从叶子节点3向上回溯
+            4：子序列[3]已经是最大字典序了，继续往上
+            7：子序列[4,3]已经是最大字典序了，继续往上
+            6：子序列[7,4,3]已经是最大字典序了，继续往上
+            5：子序列[6，7,4,3]不是最大字典序，可以进行dfs得到下一个排列
+                选择下一个比6大的数（7）作为dfs的新分支开始[7,XXX]
+                剩下的子序列[6,4,3]按照升序排列即可->7[3,4,6]
+        ----
+        到这里可以写代码了：
+            1. 从右往左找到第一个下降的数nums[i]（例子中的6）就找到了，dfs可以获得下一个排列的子序列[6,7,4,3]
+            2. 在nums[i+1:](例子中的[743])中找到下一个比nums[i]大的数(7)交换一下->[7][6,4,3]
+                - 这里是从降序序列[7,4,3]中查找第一个大于6的数，理论上可以用二分加速
+            3. 然后重排nums[i+1:]([6,4,3])即可
+        """
+        #双指针原地逆转数组
+        def reverse(array,left,right):
+            while left<=right:
+                array[left],array[right]=array[right],array[left]
+                left+=1
+                right-=1
+            return 
+        #在降序array[begin:]中查找第一个大于target的array[index]并返回index
+            # 理论上是二分，我懒得写了
+        def biSearch(array,begin,target):
+            j = len(array)-1
+            while j>=begin:
+                if array[j]>target:
+                    return j 
+                j-=1
+            return None
+        
+        #------主流程-----
+        j = len(nums)-1
+        while j-1>=0 and nums[j-1]>=nums[j]:
+            j-=1
+
+        if j-1<0:
+            reverse(nums,0,len(nums)-1)
+            return 
+
+        i= j-1
+        next = biSearch(nums,i+1,nums[i])
+        nums[i],nums[next]=nums[next],nums[i]
+        reverse(nums,i+1,len(nums)-1)
+        return 
+        
+            
+
+
+```
+
