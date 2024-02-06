@@ -1,0 +1,40 @@
+> Problem: [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/description/)
+
+[TOC]
+
+# 思路
+
+> 动态规划，后一个状态需要前一个状态退出
+
+# 解题方法
+
+> 这里是公共最长子序列，不要求子序列连续。所以我们这里定义的dp数组vector<vector<int>> dp(text1.size() + 1, vector<int>(text2.size(), 0))，其中dp[i][j]的含义是text1[0……i-1]和text2[0……j-1]的最长公共子序列的长度为dp[i][j]，为什么下标[i][j]代表的是[i-1][j-1]，这是因为这样定义dp数组可以简化初始化，不需要遍历第一行和列去初始化了，都初始化为0就可以了。这里的dp[i][j]为什么不是以text1[i-1]和text2[j-1]结尾的最长公共子序列的长度呢，这样首先不符合题意，若以上面的结尾，那么就是连续的了。
+
+> 确定变换公式，首先想dp[i][j]可以根据什么去推出来，首先这是一个二维数组，它就会有从左边、上边、左上边三个方向。再细分，如果text1[i-1]==text2[j-1]，那么就是dp[i][j] = dp[i-1][j-1] + 1。如果text1[i-1]!=text2[j-1],那么就是看dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])，为什么是这样呢，dp[i][j]相对于dp[i-1][j-1]是两个维度都+1，退一步来说就是只有一个维度+1，从而去两者最大的一个。
+
+> 初始化，就是把dp[i][0]=0，dp[0][j]=0，下标0在此dp中是没有意义的。
+
+# Code
+
+* []
+
+```C++
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        vector<vector<int>> dp(text1.size() + 1, vector<int>(text2.size() + 1, 0));
+        // <= 因为dp[text1.size()][text2.size()]代表的是[0……size-1][0……size-1]
+        for (int i = 1; i <= text1.size(); i++) {
+            for (int j = 1; j <= text2.size(); ++j) {
+                if (text1[i - 1] == text2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp.back().back();
+    }
+};
+```
+

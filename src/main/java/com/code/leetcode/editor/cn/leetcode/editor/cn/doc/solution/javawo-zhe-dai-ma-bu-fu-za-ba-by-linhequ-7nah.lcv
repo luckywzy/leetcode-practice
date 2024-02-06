@@ -1,0 +1,41 @@
+> Problem: [82. 删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/description/)
+
+[TOC]
+
+# Code
+
+* []
+
+```Java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode hair = new ListNode(0, head);
+        ListNode p = hair;
+        while (p.next != null && p.next.next != null) {
+            //要删除一系列节点
+            if (p.next.val == p.next.next.val) {
+                int t = p.next.val;
+                ListNode q = p.next;
+                while (q != null && q.val == t) {
+                    q = q.next;
+                }
+                p.next = q;
+            } else {
+                p = p.next;
+            }
+        }
+        return hair.next;
+    }
+}
+```
+

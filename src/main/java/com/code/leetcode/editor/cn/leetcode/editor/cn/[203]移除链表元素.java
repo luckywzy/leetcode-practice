@@ -37,28 +37,51 @@ package com.code.leetcode.editor.cn.leetcode.editor.cn;//给你一个链表的�
 
 
 //leetcode submit region begin(Prohibit modification and deletion)
+
 /**
- Definition for singly-linked list.
+ * Definition for singly-linked list.
  */
- class ListNode {
-     int val;
-     ListNode next;
-     ListNode() {}
-     ListNode(int val) { this.val = val; }
-     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- }
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+        this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+
+    void PrintAll() {
+        ListNode node = this;
+        System.out.print("[");
+        while (node != null) {
+            System.out.print(node.val);
+            if (node.next != null) {
+                System.out.print(",");
+            }
+            node = node.next;
+        }
+        System.out.print("]" + "\n");
+    }
+}
 
 class Solution203 {
     public ListNode removeElements(ListNode head, int val) {
-        ListNode vHead =  new ListNode();
+        ListNode vHead = new ListNode();
         vHead.next = head;
 
         ListNode node = vHead;
-        while (node.next != null){
+        while (node.next != null) {
             ListNode next = node.next;
-            if (next.val == val){
+            if (next.val == val) {
                 node.next = next.next;
-            }else {
+            } else {
                 node = node.next;
             }
         }
