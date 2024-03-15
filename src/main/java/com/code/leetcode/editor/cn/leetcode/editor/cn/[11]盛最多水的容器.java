@@ -40,9 +40,52 @@ package com.code.leetcode.editor.cn.leetcode.editor.cn;
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution11 {
+    public int maxArea1(int[] height) {
+
+        int res = 0;
+        // dp[i][j]  表示 i,j 之间时 容器能够容纳水的最大容量
+        // dp[i][j] 递推公式：
+        //      i < j, max { min{heigh[i], height[j]} * j-i, dp[i-1][j-1],dp[i][j-1],dp[i-1][j]}
+        // 初始化：dp[1..i][0] =  Math.min(height[i], height[0]) * (i) ;
+        //        dp[0][1..j] = Math.min(height[0], height[j]) * (j);
+        // 返回值：dp[height.length-1][height.length-1]
+        // 遍历顺序, 0...i, 0..j
+
+        int[][] dp = new int[height.length][height.length];
+        for (int i = 1; i < height.length; i++) {
+            dp[i][0] = Math.min(height[i], height[0]) * (i);
+            res = Math.max(res, dp[i][0]);
+        }
+        for (int j = 1; j < height.length; j++) {
+            dp[0][j] = Math.min(height[0], height[j]) * (j);
+            res = Math.max(res, dp[0][j]);
+        }
+
+        for (int i = 1; i < height.length; i++) {
+            for (int j = i + 1; j < height.length; j++) {
+                int area = Math.min(height[i], height[j]) * (j - i);
+                dp[i][j] = Math.max(Math.max(area, Math.max(dp[i][j - 1], dp[i - 1][j - 1])), dp[i - 1][j]);
+                res = Math.max(res, dp[i][j]);
+            }
+        }
+
+        return res;
+    }
+
+
     public int maxArea(int[] height) {
         int res = 0;
-
+        int i = 0;
+        int j = height.length - 1;
+        while (i < j) {
+            int area = Math.min(height[i], height[j]) * (j - i);
+            if (height[i] > height[j]) {
+                j--;
+            } else {
+                i++;
+            }
+            res = Math.max(res, area);
+        }
         return res;
     }
 }

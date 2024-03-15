@@ -29,6 +29,7 @@ public class 合并区间 {
 		for (int[] interval : intervals) {
 			list.add(new Pair(interval[0], interval[1]));
 		}
+		switch ()
 
 		list.sort(Comparator.comparingInt(o -> o.left));
 

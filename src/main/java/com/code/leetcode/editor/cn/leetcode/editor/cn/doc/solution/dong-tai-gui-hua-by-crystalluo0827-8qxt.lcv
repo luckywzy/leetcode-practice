@@ -1,0 +1,62 @@
+> Problem: [1976. 到达目的地的方案数](https://leetcode.cn/problems/number-of-ways-to-arrive-at-destination/description/)
+
+[TOC]
+
+# 思路
+
+> 这个代码使用动态规划的思想来计算从节点0到节点n-1的最短路径数量。首先初始化一个二维动态规划数组 dp，然后逐步更新数组中的值，最终得到结果。
+
+# 复杂度
+
+时间复杂度:
+
+> 遍历节点和边：时间复杂度为 O(n^2)，其中 n 为节点的数量。
+> 对于每个节点和边，需要检查更新动态规划表格中的值：时间复杂度为 O(n)。
+> 因此，总的时间复杂度为 O(n^3)。
+
+空间复杂度:
+
+> 使用了一个二维数组 dp，其大小为 n x n，因此空间复杂度为 O(n^2)。
+
+# Code
+
+* []
+
+```C++
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        const long long mod = 1e9 + 7;
+        
+        // 创建二维动态规划数组
+        vector<vector<pair<long long, int>>> dp(n, vector<pair<long long, int>>(n, {LLONG_MAX, 0}));
+        
+        // 初始化起点
+        dp[0][0] = {0, 1};
+        
+        // 更新动态规划数组
+        for (const auto& road : roads) {
+            int u = road[0], v = road[1], t = road[2];
+            dp[u][v] = dp[v][u] = {t, 1}; // 更新节点之间的路径信息
+        }
+        
+        // 动态规划求解最短路径数量
+        for (int k = 1; k < n; ++k) {
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < n; ++j) {
+                    if (dp[i][k].first != LLONG_MAX && dp[k][j].first != LLONG_MAX) {
+                        if (dp[i][k].first + dp[k][j].first < dp[i][j].first) {
+                            dp[i][j] = {dp[i][k].first + dp[k][j].first, dp[i][k].second};
+                        } else if (dp[i][k].first + dp[k][j].first == dp[i][j].first) {
+                            dp[i][j].second = (dp[i][j].second + dp[i][k].second) % mod;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return dp[0][n - 1].second;
+    }
+};
+```
+

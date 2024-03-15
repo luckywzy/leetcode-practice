@@ -62,6 +62,7 @@ package com.code.leetcode.editor.cn.leetcode.editor.cn;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class CacheNode {
@@ -83,7 +84,7 @@ class CacheNode {
 
 class LRUCache {
     HashMap<Integer, CacheNode> map;
-
+    LinkedList<Node> list = new LinkedList<>();
     int capacity;
     int usedCapacity;
 
@@ -104,7 +105,6 @@ class LRUCache {
             CacheNode newHead = map.get(key);
             //move
             remove(newHead);
-
             //to head
             addToHead(newHead);
 

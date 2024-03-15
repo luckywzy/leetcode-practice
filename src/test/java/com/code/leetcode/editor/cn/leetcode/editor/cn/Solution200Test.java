@@ -15,4 +15,14 @@ public class Solution200Test {
                 {'0', '0', '0', '0', '0'},
         }));
     }
+
+    @Test
+    public void numIslands1() {
+        assertEquals(1, new Solution200().numIslands1(new char[][]{
+                {'1', '1', '1', '1', '0'},
+                {'1', '1', '0', '1', '0'},
+                {'1', '1', '0', '0', '0'},
+                {'0', '0', '0', '0', '0'},
+        }));
+    }
 }

@@ -45,6 +45,8 @@ package com.code.leetcode.editor.cn.leetcode.editor.cn;
 // Related Topics 深度优先搜索 广度优先搜索 并查集 数组 矩阵 👍 2391 👎 0
 
 
+import java.util.ArrayDeque;
+
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution200 {
     public int numIslands(char[][] grid) {
@@ -58,6 +60,49 @@ class Solution200 {
             }
         }
         return count;
+    }
+
+    //bfs
+    public int numIslands1(char[][] grid) {
+        int count = 0;
+        ArrayDeque<int[]> queue = new ArrayDeque<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    queue.offer(new int[]{i, j});
+                    while (!queue.isEmpty()) {
+                        int[] point = queue.poll();
+                        int r = point[0], c = point[1];
+                        grid[r][c] = '0';
+                        if (isValid(grid, r + 1, c)) {
+                            queue.offer(new int[]{r + 1, c});
+                            grid[r + 1][c] = '0';
+                        }
+                        if (isValid(grid, r - 1, c)) {
+                            queue.offer(new int[]{r - 1, c});
+                            grid[r - 1][c] = '0';
+                        }
+                        if (isValid(grid, r, c + 1)) {
+                            queue.offer(new int[]{r, c + 1});
+                            grid[r][c + 1] = '0';
+                        }
+                        if (isValid(grid, r, c - 1)) {
+                            queue.offer(new int[]{r, c - 1});
+                            grid[r][c - 1] = '0';
+                        }
+                    }
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    boolean isValid(char[][] grid, int r, int c) {
+        if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length || grid[r][c] == '0') {
+            return false;
+        }
+        return true;
     }
 
 

@@ -55,15 +55,19 @@ class Solution239 {
         }
         Deque<Integer> queue = new LinkedList<>();
         for (int j = 0, i = 1 - k; j < nums.length; i++, j++) {
+            //i-1 表示这个下标要超过窗口大小 K 了，需要移除
             if (i > 0 && queue.peekFirst() == nums[i - 1]) {
                 queue.removeFirst();
-            }
+                
+            
+            //保持队列的单调性
             while (!queue.isEmpty() && queue.peekLast() < nums[j]) {
                 queue.removeLast();
             }
             queue.addLast(nums[j]);
 
             if (i >= 0) {
+                //队列头元素就是滑动窗口的最大值
                 result[i] = queue.peekFirst();
             }
         }

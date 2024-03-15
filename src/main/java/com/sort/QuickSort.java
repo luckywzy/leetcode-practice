@@ -14,17 +14,22 @@ public class QuickSort {
 		int i=low;
 		int j=high;
 		while (i < j){
-
-			while (nums[j] >= key && j>i){
+			while (i < j && nums[j] >= key){
 				j--;
 			}
-			nums[i] = nums[j];
+			swap(nums, i, j);
 			while (i< j && nums[i] <= key){
 				i++;
 			}
-			nums[j] = nums[i];
+			swap(nums, i, j);
 		}
 		quickSort(nums, low, i-1);
 		quickSort(nums, i+1, high);
+	}
+
+	private void swap(int[] arr, int i , int j){
+		int tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
 	}
 }

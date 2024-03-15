@@ -53,6 +53,7 @@ package com.code.leetcode.editor.cn.leetcode.editor.cn;//给你一个链表，�
  * }
  */
 class Solution19 {
+    //快慢指针
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dmy = new ListNode(0, head);
         ListNode fast = dmy;

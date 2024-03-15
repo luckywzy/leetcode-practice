@@ -1,0 +1,66 @@
+> Problem: [86. 分隔链表](https://leetcode.cn/problems/partition-list/description/)
+
+[TOC]
+
+# 思路
+
+一次遍历，一次找到所有小于X的节点取出，然后再放到合适的位置。所以核心的问题如下两个问题：
+1. 快慢指针（当前节点以及插入节点）
+2. 找到取出的节点
+
+# 解题方法
+
+第一步：定义快慢指针，定义虚拟头结点
+第二步：循环找到待处理的节点，插入到合适的位置。
+
+具体的代码如下。
+
+# 复杂度
+
+* 时间复杂度:
+
+一次遍历，所以时间复杂度为： $O(n)$
+
+* 空间复杂度:
+  使用了常数个空间，所以空间复杂度为： $O(1)$
+
+# Code
+
+* []
+
+```Java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        ListNode fakeNode = new ListNode(-1);
+        fakeNode.next = head;
+        ListNode slow = fakeNode, fast = fakeNode;
+        while (null != fast.next) {
+            if (fast.next.val < x) {
+                // 临时节点取出来
+                ListNode temp = fast.next;
+                fast.next = fast.next.next;
+                temp.next = slow.next;
+                slow.next = temp;
+                if (slow == fast) {
+                    fast = fast.next;
+                }
+                slow = slow.next;
+            } else {
+                fast = fast.next;
+            }
+        }
+        return fakeNode.next;
+    }
+}
+```
+

@@ -1,0 +1,63 @@
+> Problem: [28. 找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
+
+[TOC]
+
+# 思路
+
+> 使用朴素字符串哈希，把字符串映射为一个131进制的数，然后就能方便比较大小。因为131是一个素数，所以发生哈希冲突的概率较低。详细思路在代码注释。
+
+# 复杂度
+
+时间复杂度:
+
+> $O(n+m)$
+
+空间复杂度:
+
+> $O(n+m)$
+
+# Code
+
+* []
+
+```C++
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        #define ull unsigned long long
+        /*ull会自动溢出，相当于取模*/
+        int n = haystack.length(), m = needle.length();
+        haystack.insert(0,1,' ');
+        needle.insert(0,1,' ');
+        /*将下标改成以1开头，方便运算*/
+        if(m > n) return -1;
+        vector<ull> h(n+10), p(n+10);
+        p[0] = 1;
+        for(int i = 1; i <= n; i++) p[i] = p[i-1]*131;
+        /*提前算出幂次，减少运算时间*/
+        for(int i = 1; i <= n; i++) h[i] = h[i-1]*131 + haystack[i] - '0';
+        /*算出每个前缀串的哈希值，这样每个字串都能用前缀串的差来表示*/
+        ull tmp = 0;
+        for(int i = 1; i <= m; i++) tmp = tmp * 131 + needle[i] - '0';
+        /*计算模式串的哈希值*/        
+        for(int i = 1; i + m - 1 <= n; i++){
+            int l = i, r = i + m - 1;
+            if(h[r] - h[l-1]*p[r-l+1] == tmp) return i-1;
+        /**********************************************************
+        *    这里需要着重解释一下。                                   * 
+        *    举个例子，比如字符串"abc",他的前缀串可以表示为：            *
+        *    a                                                    *
+        *    a*131 + b                                            *
+        *    a*131^2 + b*131 + c                                  *
+        *    如果我们想要获取"bc*串的哈希值，那么就需要用"abc"的值       *
+        *    减去"a"的值。由于之间差了3-1=2位131次幂，所以要在前面       *
+        *    补上。                                                *
+        *    即：                                                  *
+        *    h[3] - h[1]*p[3-1]                                   *
+        **********************************************************/
+        }
+        return -1;
+    }
+};
+```
+

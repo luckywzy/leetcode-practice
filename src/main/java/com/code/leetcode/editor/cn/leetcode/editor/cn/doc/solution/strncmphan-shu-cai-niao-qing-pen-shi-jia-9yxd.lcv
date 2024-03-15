@@ -1,0 +1,38 @@
+> Problem: [28. 找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
+
+[TOC]
+
+# 思路
+
+使用strncmp函数，枚举每一个haystack字符串的起点，用needle字符串的长度作为限制变量
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```C
+int strStr(char* haystack, char* needle) {
+    int length=strlen(needle);
+    for(int i=0;i<strlen(haystack);i++)
+    {
+        if(strncmp(haystack+i,needle,length)==0)
+        return i;
+    }
+    return -1;
+}
+```
+

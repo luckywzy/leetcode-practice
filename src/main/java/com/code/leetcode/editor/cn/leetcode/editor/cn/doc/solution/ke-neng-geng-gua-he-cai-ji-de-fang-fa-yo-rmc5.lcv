@@ -1,0 +1,62 @@
+> Problem: [207. 课程表](https://leetcode.cn/problems/course-schedule/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```C++
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+int m=prerequisites.size();//m用来记录课程总数
+int num[numCourses];//num数组记录每个课程，该课程前要上的课程数
+for(int i=0;i<numCourses;i++){
+	num[i]=0;//初始化为0
+}
+for(int i=0;i<m;i++){
+num[prerequisites[i][0]]++;//num数组赋值
+}
+int judge=1;//用来判断循环结束条件
+int cnt=0;//用来判断是否能上完所有课
+while(judge==1){
+	judge=0;//每次进去让judge=0，有为0的数组值才把judge赋值1.
+for(int i=0;i<numCourses;i++){
+	if(num[i]==0){//找到一个可以执行的课程
+		num[i]=-1;//赋值为1，不再遍历它
+		cnt++;
+		judge=1;
+		for(int j=0;j<m;j++){
+		if(prerequisites[j][1]==i)//关键一步，遍历找哪个课程在当前课程的后面
+		num[prerequisites[j][0]]--;//把当前课程后面的课程的num减一
+		}
+	}
+}
+}
+if(cnt==numCourses){//判断全部课程上完的条件
+return 1;}
+else
+return 0;
+    }
+};
+```
+

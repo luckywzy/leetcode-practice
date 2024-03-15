@@ -1,0 +1,107 @@
+> Problem: [207. 课程表](https://leetcode.cn/problems/course-schedule/description/)
+
+[TOC]
+
+# 思路
+
+> 拓扑排序 把官方的意思说成人话就是 如果一个**列表**中任意两个节点先后顺序不可变 且改列表包含图中所有节点 则这个列表就是图的一个拓扑排序
+
+# 解题方法
+
+> 按照入度去迭代好做一些
+
+首先进行预处理：
+
+> 对每个课程都记录
+>
+>> 1.当前课程与其**前置**课程列表的对应关系
+>> 2.当前课程与其**后置**课程列表的对应关系
+>> 3.当前课程与其**入度**的对应关系
+
+然后在bfs的过程中更新每个课程的入度，若当前课程入度为零就加入拓扑排序列表
+
+最后检查拓扑排序列表的长度是否等于课程数，若相等，说明找到了一种可行的拓扑排序。若不相等，则说明某些课程出现了循环依赖的关系
+
+# 复杂度
+
+时间复杂度:
+
+> $O(n+m)$
+
+空间复杂度:
+
+> $O(n+m)$
+
+# Code
+
+* []
+
+```Java
+class Solution {
+    //定义一个map 存学cursei 前 需要学的 课程列表
+    Map<Integer,List<Integer>> preMap;
+    //定义一个map 存学完 cursei后 可修的 课程列表
+    Map<Integer, List<Integer>> map;
+    //还需要定义一个map 存 cursei的入度
+    Map<Integer,Integer> valMap;
+    //放一种满足答案的拓扑排序
+    List<Integer> res;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        map = new HashMap<>();
+        valMap = new HashMap<>();
+        res = new ArrayList<>();
+        preMap = new HashMap<>();
+        //每个curse的初始入度设为0
+        for(int i=0;i<numCourses;i++){
+            valMap.put(i,0);
+        }
+        //初始化学完cursei后 对应的 可修课程列表；
+        for(int[] pre : prerequisites){
+            int toDo = pre[0]; int mustDone = pre[1];
+            List<Integer> canDoList = map.getOrDefault(mustDone,new ArrayList<>());
+            canDoList.add(toDo);
+            map.put(mustDone,canDoList);
+            
+        }
+        //初始化学cursei之前 对应的 需要修的课程列表
+        //并更新cursei的入度
+        for(int[] pre : prerequisites){
+             int toDo = pre[0]; int mustDone = pre[1];
+            List<Integer> mustDoneList = preMap.getOrDefault(toDo,new ArrayList<>());
+            mustDoneList.add(mustDone);
+            preMap.put(toDo,mustDoneList);
+           valMap.put(toDo,valMap.getOrDefault(toDo,0)+1);
+        }
+        //定义一个队列用于bfs 
+        //首先加入所有入度为0的课程序号(不需要先修其他课程) 
+        Queue<Integer> que = new LinkedList<>();
+        for(Integer i  : valMap.keySet()){
+            if(valMap.get(i)==0) que.offer(i);
+        }
+
+        while(!que.isEmpty()){
+            int size =que.size();
+            for(int i=0;i<size;i++){
+                //入度为0 的课程序号
+                int curIdx = que.poll();
+                //加入拓扑排序的结果列表
+                res.add(curIdx);
+                //可以修的课程列表
+                List<Integer> canDoList = map.getOrDefault(curIdx,new ArrayList<>());
+                for(Integer canDo : canDoList){
+                    //每个课程的入度减一
+                    valMap.put(canDo,valMap.get(canDo)-1);
+                    //如果课程入度为0 就放入当前的队列
+                    if(valMap.get(canDo)==0) que.offer(canDo);
+                }
+                
+            }
+        }
+
+        //判断拓扑排序结果的长度是否等于 课程的数量
+        return res.size()==numCourses? true : false;
+
+    }
+}
+```
+

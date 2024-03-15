@@ -60,9 +60,11 @@ import java.util.Collections;
 class Solution31 {
     public void nextPermutation(int[] nums) {
         int i = nums.length - 2;
+        //找到一位num[i] < num[i+1]
         while (i >= 0 && nums[i] >= nums[i + 1]) {
             i--;
         }
+        //找到后，再从i..n-1 找一个比num[i]大的num[j]，将num[j] 与num[i]交换
         if (i >= 0) {
             int j = nums.length - 1;
             while (j >= 0 && nums[i] > nums[j]) {
